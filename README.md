@@ -2,5 +2,5 @@
 ##project viewers
 >me  
 
->you
+>you  
 >they
