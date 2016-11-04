@@ -21,4 +21,4 @@
 * 需要对文件md5做校验
 
 >> 20161104 回源链路 
-[pics](http://test.dl.qingcdn.com/test.jpg "ceshi")
+![pics](http://test.dl.qingcdn.com/test.jpg "ceshi")
