@@ -1,5 +1,6 @@
 # test
 ##project viewers
->me
+>me  
+
 >you
 >they
