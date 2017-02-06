@@ -1,17 +1,11 @@
+Network Working Group                                          T. Dierks  
+Request for Comments: 5246                                   Independent  
+Obsoletes: 3268, 4346, 4366                                  E. Rescorla  
+Updates: 4492                                                 RTFM, Inc.  
+Category: Standards Track                                    August 2008  
 
 
-
-
-
-
-Network Working Group                                          T. Dierks
-Request for Comments: 5246                                   Independent
-Obsoletes: 3268, 4346, 4366                                  E. Rescorla
-Updates: 4492                                                 RTFM, Inc.
-Category: Standards Track                                    August 2008
-
-
-              The Transport Layer Security (TLS) Protocol
+              The Transport Layer Security (TLS) Protocol  
                               Version 1.2
 
 Status of This Memo
@@ -32,145 +26,105 @@ Abstract
 
 Table of Contents
 
-   1. Introduction ....................................................4
-      1.1. Requirements Terminology ...................................5
-      1.2. Major Differences from TLS 1.1 .............................5
-   2. Goals ...........................................................6
-   3. Goals of This Document ..........................................7
-   4. Presentation Language ...........................................7
-      4.1. Basic Block Size ...........................................7
-      4.2. Miscellaneous ..............................................8
-      4.3. Vectors ....................................................8
-      4.4. Numbers ....................................................9
-      4.5. Enumerateds ................................................9
-      4.6. Constructed Types .........................................10
-           4.6.1. Variants ...........................................10
-      4.7. Cryptographic Attributes ..................................12
-      4.8. Constants .................................................14
-   5. HMAC and the Pseudorandom Function .............................14
-   6. The TLS Record Protocol ........................................15
-      6.1. Connection States .........................................16
-      6.2. Record Layer ..............................................19
-           6.2.1. Fragmentation ......................................19
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 1]
-
-RFC 5246                          TLS                        August 2008
-
-
-           6.2.2. Record Compression and Decompression ...............20
-           6.2.3. Record Payload Protection ..........................21
-                  6.2.3.1. Null or Standard Stream Cipher ............22
-                  6.2.3.2. CBC Block Cipher ..........................22
-                  6.2.3.3. AEAD Ciphers ..............................24
-      6.3. Key Calculation ...........................................25
-   7. The TLS Handshaking Protocols ..................................26
-      7.1. Change Cipher Spec Protocol ...............................27
-      7.2. Alert Protocol ............................................28
-           7.2.1. Closure Alerts .....................................29
-           7.2.2. Error Alerts .......................................30
-      7.3. Handshake Protocol Overview ...............................33
-      7.4. Handshake Protocol ........................................37
-           7.4.1. Hello Messages .....................................38
-                  7.4.1.1. Hello Request .............................38
-                  7.4.1.2. Client Hello ..............................39
-                  7.4.1.3. Server Hello ..............................42
-                  7.4.1.4. Hello Extensions ..........................44
-                           7.4.1.4.1. Signature Algorithms ...........45
-           7.4.2. Server Certificate .................................47
-           7.4.3. Server Key Exchange Message ........................50
-           7.4.4. Certificate Request ................................53
-           7.4.5. Server Hello Done ..................................55
-           7.4.6. Client Certificate .................................55
-           7.4.7. Client Key Exchange Message ........................57
-                  7.4.7.1. RSA-Encrypted Premaster Secret Message ....58
-                  7.4.7.2. Client Diffie-Hellman Public Value ........61
-           7.4.8. Certificate Verify .................................62
-           7.4.9. Finished ...........................................63
-   8. Cryptographic Computations .....................................64
-      8.1. Computing the Master Secret ...............................64
-           8.1.1. RSA ................................................65
-           8.1.2. Diffie-Hellman .....................................65
-   9. Mandatory Cipher Suites ........................................65
-   10. Application Data Protocol .....................................65
-   11. Security Considerations .......................................65
-   12. IANA Considerations ...........................................65
-   Appendix A. Protocol Data Structures and Constant Values ..........68
-      A.1. Record Layer ..............................................68
-      A.2. Change Cipher Specs Message ...............................69
-      A.3. Alert Messages ............................................69
-      A.4. Handshake Protocol ........................................70
-           A.4.1. Hello Messages .....................................71
-           A.4.2. Server Authentication and Key Exchange Messages ....72
-           A.4.3. Client Authentication and Key Exchange Messages ....74
-           A.4.4. Handshake Finalization Message .....................74
-      A.5. The Cipher Suite ..........................................75
-      A.6. The Security Parameters ...................................77
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 2]
-
-RFC 5246                          TLS                        August 2008
-
-
-      A.7. Changes to RFC 4492 .......................................78
-   Appendix B. Glossary ..............................................78
-   Appendix C. Cipher Suite Definitions ..............................83
-   Appendix D. Implementation Notes ..................................85
-      D.1. Random Number Generation and Seeding ......................85
-      D.2. Certificates and Authentication ...........................85
-      D.3. Cipher Suites .............................................85
-      D.4. Implementation Pitfalls ...................................85
-   Appendix E. Backward Compatibility ................................87
-      E.1. Compatibility with TLS 1.0/1.1 and SSL 3.0 ................87
-      E.2. Compatibility with SSL 2.0 ................................88
-      E.3. Avoiding Man-in-the-Middle Version Rollback ...............90
-   Appendix F. Security Analysis .....................................91
-      F.1. Handshake Protocol ........................................91
-           F.1.1. Authentication and Key Exchange ....................91
-                  F.1.1.1. Anonymous Key Exchange ....................91
-                  F.1.1.2. RSA Key Exchange and Authentication .......92
-                  F.1.1.3. Diffie-Hellman Key Exchange with
-                           Authentication ............................92
-           F.1.2. Version Rollback Attacks ...........................93
-           F.1.3. Detecting Attacks Against the Handshake Protocol ...94
-           F.1.4. Resuming Sessions ..................................94
-      F.2. Protecting Application Data ...............................94
-      F.3. Explicit IVs ..............................................95
-      F.4. Security of Composite Cipher Modes ........................95
-      F.5. Denial of Service .........................................96
-      F.6. Final Notes ...............................................96
-   Normative References ..............................................97
-   Informative References ............................................98
-   Working Group Information ........................................101
-   Contributors .....................................................101
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 3]
-
-RFC 5246                          TLS                        August 2008
-
+   1. Introduction ....................................................4  
+      1.1. Requirements Terminology ...................................5  
+      1.2. Major Differences from TLS 1.1 .............................5  
+   2. Goals ...........................................................6  
+   3. Goals of This Document ..........................................7  
+   4. Presentation Language ...........................................7  
+      4.1. Basic Block Size ...........................................7  
+      4.2. Miscellaneous ..............................................8  
+      4.3. Vectors ....................................................8  
+      4.4. Numbers ....................................................9  
+      4.5. Enumerateds ................................................9  
+      4.6. Constructed Types .........................................10  
+           4.6.1. Variants ...........................................10  
+      4.7. Cryptographic Attributes ..................................12  
+      4.8. Constants .................................................14  
+   5. HMAC and the Pseudorandom Function .............................14  
+   6. The TLS Record Protocol ........................................15  
+      6.1. Connection States .........................................16  
+      6.2. Record Layer ..............................................19  
+           6.2.1. Fragmentation ......................................19  
+           6.2.2. Record Compression and Decompression ...............20  
+           6.2.3. Record Payload Protection ..........................21  
+                  6.2.3.1. Null or Standard Stream Cipher ............22  
+                  6.2.3.2. CBC Block Cipher ..........................22  
+                  6.2.3.3. AEAD Ciphers ..............................24  
+      6.3. Key Calculation ...........................................25  
+   7. The TLS Handshaking Protocols ..................................26  
+      7.1. Change Cipher Spec Protocol ...............................27  
+      7.2. Alert Protocol ............................................28  
+           7.2.1. Closure Alerts .....................................29  
+           7.2.2. Error Alerts .......................................30  
+      7.3. Handshake Protocol Overview ...............................33  
+      7.4. Handshake Protocol ........................................37  
+           7.4.1. Hello Messages .....................................38  
+                  7.4.1.1. Hello Request .............................38  
+                  7.4.1.2. Client Hello ..............................39  
+                  7.4.1.3. Server Hello ..............................42  
+                  7.4.1.4. Hello Extensions ..........................44  
+                           7.4.1.4.1. Signature Algorithms ...........45  
+           7.4.2. Server Certificate .................................47  
+           7.4.3. Server Key Exchange Message ........................50  
+           7.4.4. Certificate Request ................................53  
+           7.4.5. Server Hello Done ..................................55  
+           7.4.6. Client Certificate .................................55  
+           7.4.7. Client Key Exchange Message ........................57  
+                  7.4.7.1. RSA-Encrypted Premaster Secret Message ....58  
+                  7.4.7.2. Client Diffie-Hellman Public Value ........61  
+           7.4.8. Certificate Verify .................................62  
+           7.4.9. Finished ...........................................63  
+   8. Cryptographic Computations .....................................64  
+      8.1. Computing the Master Secret ...............................64  
+           8.1.1. RSA ................................................65  
+           8.1.2. Diffie-Hellman .....................................65  
+   9. Mandatory Cipher Suites ........................................65  
+   10. Application Data Protocol .....................................65  
+   11. Security Considerations .......................................65  
+   12. IANA Considerations ...........................................65  
+   Appendix A. Protocol Data Structures and Constant Values ..........68  
+      A.1. Record Layer ..............................................68  
+      A.2. Change Cipher Specs Message ...............................69  
+      A.3. Alert Messages ............................................69  
+      A.4. Handshake Protocol ........................................70  
+           A.4.1. Hello Messages .....................................71  
+           A.4.2. Server Authentication and Key Exchange Messages ....72  
+           A.4.3. Client Authentication and Key Exchange Messages ....74  
+           A.4.4. Handshake Finalization Message .....................74  
+      A.5. The Cipher Suite ..........................................75  
+      A.6. The Security Parameters ...................................77  
+      A.7. Changes to RFC 4492 .......................................78  
+   Appendix B. Glossary ..............................................78  
+   Appendix C. Cipher Suite Definitions ..............................83  
+   Appendix D. Implementation Notes ..................................85  
+      D.1. Random Number Generation and Seeding ......................85  
+      D.2. Certificates and Authentication ...........................85  
+      D.3. Cipher Suites .............................................85  
+      D.4. Implementation Pitfalls ...................................85  
+   Appendix E. Backward Compatibility ................................87  
+      E.1. Compatibility with TLS 1.0/1.1 and SSL 3.0 ................87  
+      E.2. Compatibility with SSL 2.0 ................................88  
+      E.3. Avoiding Man-in-the-Middle Version Rollback ...............90  
+   Appendix F. Security Analysis .....................................91  
+      F.1. Handshake Protocol ........................................91  
+           F.1.1. Authentication and Key Exchange ....................91  
+                  F.1.1.1. Anonymous Key Exchange ....................91  
+                  F.1.1.2. RSA Key Exchange and Authentication .......92  
+                  F.1.1.3. Diffie-Hellman Key Exchange with               
+                           Authentication ............................92  
+           F.1.2. Version Rollback Attacks ...........................93  
+           F.1.3. Detecting Attacks Against the Handshake Protocol ...94  
+           F.1.4. Resuming Sessions ..................................94  
+      F.2. Protecting Application Data ...............................94  
+      F.3. Explicit IVs ..............................................95  
+      F.4. Security of Composite Cipher Modes ........................95  
+      F.5. Denial of Service .........................................96  
+      F.6. Final Notes ...............................................96  
+   Normative References ..............................................97  
+   Informative References ............................................98  
+   Working Group Information ........................................101  
+   Contributors .....................................................101  
 
 1.  Introduction
 
@@ -180,129 +134,84 @@ RFC 5246                          TLS                        August 2008
    Protocol.  At the lowest level, layered on top of some reliable
    transport protocol (e.g., TCP [TCP]), is the TLS Record Protocol.
    The TLS Record Protocol provides connection security that has two
-   basic properties:
+   basic properties:  
+   TLS协议主要用于在两个交互的应用之间保证数据的私有以及完整。协议由两层组成：TLS记录协议及TLS握手协议。最低水平，依赖于一些可靠传输协议（如 TCP[TCP]）之上，是TLS记录协议。TLS记录协议提供链接安全，主要有两个基本特性：  
+   -  The connection is private.  Symmetric cryptography is used for data encryption (e.g., AES [AES], RC4 [SCH], etc.).  The keys for this symmetric encryption are generated uniquely for each connection and are based on a secret negotiated by another protocol (such as the TLS Handshake Protocol).  The Record Protocol can also be used without encryption.  
+      链接是私有的。数据加密使用对称加密算法（如 AES[AES],RC4 [SCH]等）。对称加密算法为每个链接生成唯一的密钥，并且是基于另外的协议进行秘密协商（例如TLS握手协议）。记录协议也可以不进行加密使用。   
+   -  The connection is reliable.  Message transport includes a message integrity check using a keyed MAC.  Secure hash functions (e.g.,SHA-1, etc.) are used for MAC computations.  The Record Protocol can operate without a MAC, but is generally only used in this mode while another protocol is using the Record Protocol as a transport for negotiating security parameters.  
+      链接是可靠的。信息传输使用MAC对信息完整性做校验。MAC计算使用安全哈希功能（如SHA-1）. 记录协议可以不使用MAC,但是通常只有在其他的协议为了协商安全参数使用记录协议进行传输时才使用  
 
-   -  The connection is private.  Symmetric cryptography is used for
-      data encryption (e.g., AES [AES], RC4 [SCH], etc.).  The keys for
-      this symmetric encryption are generated uniquely for each
-      connection and are based on a secret negotiated by another
-      protocol (such as the TLS Handshake Protocol).  The Record
-      Protocol can also be used without encryption.
+   The TLS Record Protocol is used for encapsulation of various higher-level protocols. One such encapsulated protocol, the TLS Handshake Protocol, allows the server and client to authenticate each other and to negotiate an encryption algorithm and cryptographic keys before the application protocol transmits or receives its first byte of data.  The TLS Handshake Protocol provides connection security that has three basic properties:  
+   TLS记录协议是用于各种高层协议封装。 一个类似的封装协议，TLS握手协议，允许服务器和客户端互相校验，并且在应用协议传输或者接收第一个数据字节之前协商加密算法和加密密钥。 TLS握手协议提供的链接安全有三个基本特性：  
 
-   -  The connection is reliable.  Message transport includes a message
-      integrity check using a keyed MAC.  Secure hash functions (e.g.,
-      SHA-1, etc.) are used for MAC computations.  The Record Protocol
-      can operate without a MAC, but is generally only used in this mode
-      while another protocol is using the Record Protocol as a transport
-      for negotiating security parameters.
+   -  The peer's identity can be authenticated using asymmetric, or public key, cryptography (e.g., RSA [RSA], DSA [DSS], etc.).  This authentication can be made optional, but is generally required for at least one of the peers.
+      对端的身份可以使用非对称的或者公共密钥，密码系统（如RSA [RSA] ,DSA [DSS]等）进行核验。  这个核验可以是可选的，但是通常要求至少一个对端需要进行。  
 
-   The TLS Record Protocol is used for encapsulation of various higher-
-   level protocols.  One such encapsulated protocol, the TLS Handshake
-   Protocol, allows the server and client to authenticate each other and
-   to negotiate an encryption algorithm and cryptographic keys before
-   the application protocol transmits or receives its first byte of
-   data.  The TLS Handshake Protocol provides connection security that
-   has three basic properties:
+   -  The negotiation of a shared secret is secure: the negotiated secret is unavailable to eavesdroppers, and for any authenticated connection the secret cannot be obtained, even by an attacker who can place himself in the middle of the connection.  
+      共享密钥的协商过程是安全的：协商的密钥对黑客是难以获取的，并且对于身份验证的密钥无法被获取，及时攻击者将自己置于链接之间。
 
-   -  The peer's identity can be authenticated using asymmetric, or
-      public key, cryptography (e.g., RSA [RSA], DSA [DSS], etc.).  This
-      authentication can be made optional, but is generally required for
-      at least one of the peers.
+   -  The negotiation is reliable: no attacker can modify the negotiation communication without being detected by the parties to the communication.  
+      协商过程是可靠的：没有攻击者可以修改协商通信而不被通信的各方检测到。  
 
-   -  The negotiation of a shared secret is secure: the negotiated
-      secret is unavailable to eavesdroppers, and for any authenticated
-      connection the secret cannot be obtained, even by an attacker who
-      can place himself in the middle of the connection.
-
-   -  The negotiation is reliable: no attacker can modify the
-      negotiation communication without being detected by the parties to
-      the communication.
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 4]
-
-RFC 5246                          TLS                        August 2008
-
-
-   One advantage of TLS is that it is application protocol independent.
-   Higher-level protocols can layer on top of the TLS protocol
-   transparently.  The TLS standard, however, does not specify how
-   protocols add security with TLS; the decisions on how to initiate TLS
-   handshaking and how to interpret the authentication certificates
-   exchanged are left to the judgment of the designers and implementors
-   of protocols that run on top of TLS.
+   One advantage of TLS is that it is application protocol independent. Higher-level protocols can layer on top of the TLS protocol transparently.  The TLS standard, however, does not specify how protocols add security with TLS; the decisions on how to initiate TLS handshaking and how to interpret the authentication certificates exchanged are left to the judgment of the designers and implementors of protocols that run on top of TLS.  
+   TLS的一个优势是应用协议独立的。更高水平的协议可以在TLS协议上透明使用。然而，TLS标准没有声明协议如何通过TLS增加安全性；关于如何初始化TLS握手、如何解释认证证书的交换由运行于TLS之上的协议的开发人员和应用人员去做判断。  
 
 1.1.  Requirements Terminology
 
-   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-   document are to be interpreted as described in RFC 2119 [REQ].
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 [REQ].
 
 1.2.  Major Differences from TLS 1.1
 
-   This document is a revision of the TLS 1.1 [TLS1.1] protocol which
-   contains improved flexibility, particularly for negotiation of
-   cryptographic algorithms.  The major changes are:
+   This document is a revision[修改] of the TLS 1.1 [TLS1.1] protocol which contains improved flexibility, particularly for negotiation[协商，谈判] of cryptographic[用密码写的] algorithms.  The major changes are:  
+   这个文档是对TLS 1.1 协议的修订，提升了灵活性，特别是密码算法的协商过程。  主要的改变包括：  
 
-   -  The MD5/SHA-1 combination in the pseudorandom function (PRF) has
-      been replaced with cipher-suite-specified PRFs.  All cipher suites
-      in this document use P_SHA256.
+   -  The MD5/SHA-1 combination in the pseudorandom【伪随机的】 function (PRF) has been replaced with cipher-suite-specified PRFs.  All cipher suites in this document use P_SHA256.  
+      在伪随机功能中使用的的MD5/SHA-1联合体已经被cipher-suite-specified PRFs所取代。这个文档中所有的密文簇都是用P_SHA256  
 
-   -  The MD5/SHA-1 combination in the digitally-signed element has been
-      replaced with a single hash.  Signed elements now include a field
-      that explicitly specifies the hash algorithm used.
+   -  The MD5/SHA-1 combination in the digitally-signed element has been replaced with a single hash.  Signed elements now include a field that explicitly specifies the hash algorithm used.  
+      数字签名元素中的MD5/SHA-1联合体已经被单一哈希替代。 签名元素现在包含一个明确指明了要使用的哈希算法的字段。   
 
-   -  Substantial cleanup to the client's and server's ability to
-      specify which hash and signature algorithms they will accept.
-      Note that this also relaxes some of the constraints on signature
-      and hash algorithms from previous versions of TLS.
+   -  Substantial【大量的；重大的】 cleanup to the client's and server's ability to specify which hash and signature algorithms they will accept. Note that this also relaxes some of the constraints on signature and hash algorithms from previous versions of TLS.  
+      大量清理了客户端和服务端指定要接受哪些哈希和前面算法的能力。注意，相比之前的TLS版本，这也放松了一些关于签名和哈希算法的约束。  
 
-   -  Addition of support for authenticated encryption with additional
-      data modes.
+   -  Addition of support for authenticated encryption with additional data modes.  
+      对使用额外的数据模式的认证加密提供了额外的支持。  
 
-   -  TLS Extensions definition and AES Cipher Suites were merged in
-      from external [TLSEXT] and [TLSAES].
+   -  TLS Extensions definition and AES Cipher Suites were merged in from external [TLSEXT] and [TLSAES].  
+      TLS的扩展定义和AES密文簇从外部的[TLSEXT]和[TLSAES]合并
 
-   -  Tighter checking of EncryptedPreMasterSecret version numbers.
+   -  Tighter checking of EncryptedPreMasterSecret version numbers.  
+      对EncryptedPreMasterSecret版本号做更严格的检查。  
 
-   -  Tightened up a number of requirements.
+   -  Tightened[收紧] up a number of requirements.
+      收紧众多的请求。  
 
-   -  Verify_data length now depends on the cipher suite (default is
-      still 12).
+   -  Verify_data length now depends on the cipher suite (default is still 12).
+      验证数据长度由密文簇决定（默认还是12）.  
 
-   -  Cleaned up description of Bleichenbacher/Klima attack defenses.
-
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 5]
-
-RFC 5246                          TLS                        August 2008
-
+   -  Cleaned up description of Bleichenbacher/Klima attack defenses.  
+      清理关于Bleichenbacher/Klima攻击防御的描述
 
    -  Alerts MUST now be sent in many cases.
+      许多场景必须发送告警。  
 
-   -  After a certificate_request, if no certificates are available,
-      clients now MUST send an empty certificate list.
+   -  After a certificate_request, if no certificates are available, clients now MUST send an empty certificate list.
+      一个认证请求后，如果没有证书是可用的，客户端必须发送一个空的证书列表。  
 
-   -  TLS_RSA_WITH_AES_128_CBC_SHA is now the mandatory to implement
-      cipher suite.
+   -  TLS_RSA_WITH_AES_128_CBC_SHA is now the mandatory to implement cipher suite.
+      TLS_RSA_WITH_AES_128_CBC_SHA目前强制应用于密文簇中。  
 
-   -  Added HMAC-SHA256 cipher suites.
+   -  Added HMAC-SHA256 cipher suites.  
+      增加HMAC-SHA256密文簇。
 
-   -  Removed IDEA and DES cipher suites.  They are now deprecated and
-      will be documented in a separate document.
+   -  Removed IDEA and DES cipher suites.  They are now deprecated【不赞成】 and will be documented in a separate document.
+   -  移出IDEA和DES密文簇。  他们目前不赞成被使用，将会在一个独立的文本中说明。  
 
-   -  Support for the SSLv2 backward-compatible hello is now a MAY, not
-      a SHOULD, with sending it a SHOULD NOT.  Support will probably
-      become a SHOULD NOT in the future.
+   -  Support for the SSLv2 backward-compatible hello is now a MAY, not a SHOULD, with sending it a SHOULD NOT.  Support will probably become a SHOULD NOT in the future.
+      对SSLv2的后向兼容的hello的支持目前是MAY，而不是SHOUL。对于他的支持后续可能会变成SHOULD NOT。
 
-   -  Added limited "fall-through" to the presentation language to allow
-      multiple case arms to have the same encoding.
+   -  Added limited "fall-through" to the presentation language to allow multiple case arms to have the same encoding.
+      
 
    -  Added an Implementation Pitfalls sections
 
@@ -311,68 +220,38 @@ RFC 5246                          TLS                        August 2008
 2.  Goals
 
    The goals of the TLS protocol, in order of priority, are as follows:
+   TLS协议的目标，按照优先级排列如下：  
+   1. Cryptographic security: TLS should be used to establish a secure connection between two parties.
+   1. 密码安全：  
+   
+   2. Interoperability: Independent programmers should be able to develop applications utilizing TLS that can successfully exchange cryptographic parameters without knowledge of one another's code.
+   2. 协同工作的能力：  
+   
+   3. Extensibility: TLS seeks to provide a framework into which new public key and bulk encryption methods can be incorporated as necessary.  This will also accomplish two sub-goals: preventing the need to create a new protocol (and risking the introduction of possible new weaknesses) and avoiding the need to implement an entire new security library.
+   3. 可扩展性：  
 
-   1. Cryptographic security: TLS should be used to establish a secure
-      connection between two parties.
+   4. Relative efficiency: Cryptographic operations tend to be highly CPU intensive【加强的】, particularly public key operations.  For this reason, the TLS protocol has incorporated an optional session caching scheme to reduce the number of connections that need to be established from scratch. dditionally, care has been taken to reduce network activity.
+   4. 相对效率：  
 
-   2. Interoperability: Independent programmers should be able to
-      develop applications utilizing TLS that can successfully exchange
-      cryptographic parameters without knowledge of one another's code.
+3.  Goals of This Document 本文档的目的  
 
-   3. Extensibility: TLS seeks to provide a framework into which new
-      public key and bulk encryption methods can be incorporated as
-      necessary.  This will also accomplish two sub-goals: preventing
-      the need to create a new protocol (and risking the introduction of
-      possible new weaknesses) and avoiding the need to implement an
-      entire new security library.
+   This document and the TLS protocol itself are based on the SSL 3.0 Protocol Specification as published by Netscape.  The differences between this protocol and SSL 3.0 are not dramatic, but they are significant enough that the various versions of TLS and SSL 3.0 do not interoperate[交互操作] (although each protocol incorporates a mechanism by which an implementation can back down to prior versions).  This document is intended primarily for readers who will be implementing the protocol and for those doing cryptographic analysis of it.  The specification has been written with this in mind, and it is intended to reflect the needs of those two groups.  For that reason, many of the algorithm-dependent data structures and rules are included in the body of the text (as opposed to in an appendix), providing easier access to them.
+   此文档和TLS协议本身是基于Netscape发布的SSL 3.0 协议规范。  此协议和SSL3.0之间的差异并不激动人心，但是各个TLS版本和SSL3.0之间并不是可以互相操作的。 这个文档主要服务于将要使用这个协议的以及分析此协议的加密算法的读者。  此文档主要依据以上思路写作，也会反映这两个群体人员的需求。  出于以上原因，许多算法依赖的数据结构和规则在text文档中包含，访问读取。  
 
-   4. Relative efficiency: Cryptographic operations tend to be highly
-      CPU intensive, particularly public key operations.  For this
-      reason, the TLS protocol has incorporated an optional session
-      caching scheme to reduce the number of connections that need to be
-      established from scratch.  Additionally, care has been taken to
-      reduce network activity.
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 6]
-
-RFC 5246                          TLS                        August 2008
-
-
-3.  Goals of This Document
-
-   This document and the TLS protocol itself are based on the SSL 3.0
-   Protocol Specification as published by Netscape.  The differences
-   between this protocol and SSL 3.0 are not dramatic, but they are
-   significant enough that the various versions of TLS and SSL 3.0 do
-   not interoperate (although each protocol incorporates a mechanism by
-   which an implementation can back down to prior versions).  This
-   document is intended primarily for readers who will be implementing
-   the protocol and for those doing cryptographic analysis of it.  The
-   specification has been written with this in mind, and it is intended
-   to reflect the needs of those two groups.  For that reason, many of
-   the algorithm-dependent data structures and rules are included in the
-   body of the text (as opposed to in an appendix), providing easier
-   access to them.
-
-   This document is not intended to supply any details of service
-   definition or of interface definition, although it does cover select
-   areas of policy as they are required for the maintenance of solid
-   security.
+   This document is not intended to supply any details of service definition or of interface definition, although it does cover select areas of policy as they are required for the maintenance of solid security.
 
 4.  Presentation Language
 
    This document deals with the formatting of data in an external
    representation.  The following very basic and somewhat casually
    defined presentation syntax will be used.  The syntax draws from
-   several sources in its structure.  Although it resembles the
+   several sources in its structure.  Although it resembles【效仿】 the
    programming language "C" in its syntax and XDR [XDR] in both its
    syntax and intent, it would be risky to draw too many parallels.  The
    purpose of this presentation language is to document TLS only; it has
    no general application beyond that particular goal.
 
-4.1.  Basic Block Size
+4.1.  Basic Block Size  基本块尺寸  
 
    The representation of all data items is explicitly specified.  The
    basic data block size is one byte (i.e., 8 bits).  Multiple byte data
@@ -382,48 +261,47 @@ RFC 5246                          TLS                        August 2008
 
       value = (byte[0] << 8*(n-1)) | (byte[1] << 8*(n-2)) |
               ... | byte[n-1];
-
+   所有数据条目的表达是清晰定义的。  基本的数据块大小为1个字节（8位）.  多字节数据条目是字节的结合，从左往右，从上往下。 从字节流，一个多字节题条目（案例中的数据）由以下组成(使用C语法)：  
+      value = (byte[0] << 8*(n-1)) | (byte[1] << 8*(n-2)) |
+              ... | byte[n-1];  
    This byte ordering for multi-byte values is the commonplace network
    byte order or big-endian format.
+   
 
 
+4.2.  Miscellaneous  其他方面  
 
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 7]
-
-RFC 5246                          TLS                        August 2008
-
-
-4.2.  Miscellaneous
-
-   Comments begin with "/*" and end with "*/".
+   Comments begin with "/*" and end with "*/".  注释  
 
    Optional components are denoted by enclosing them in "[[ ]]" double
-   brackets.
+   brackets.  可选部分使用[[]]括起来  
 
    Single-byte entities containing uninterpreted data are of type
-   opaque.
+   opaque.  
 
-4.3.  Vectors
+4.3.  Vectors【向量】
 
-   A vector (single-dimensioned array) is a stream of homogeneous data
+   A vector (single-dimensioned array) is a stream of homogeneous【相似的】 data
    elements.  The size of the vector may be specified at documentation
    time or left unspecified until runtime.  In either case, the length
    declares the number of bytes, not the number of elements, in the
    vector.  The syntax for specifying a new type, T', that is a fixed-
    length vector of type T is
 
-      T T'[n];
+      T T'[n];  
+
+   一个向量是一批相似数据元素。  向量的大小可能会在文档编写时定义好，或者直到运行时定义。  无论是哪种情况，向量的长度声明的是字节的数量，而不是元素的数量。为这个新类型定义了句法,T',下面是一个固定长度的T类型向量：  
+      T T'[n];  
 
    Here, T' occupies n bytes in the data stream, where n is a multiple
    of the size of T.  The length of the vector is not included in the
    encoded stream.
+   这里，T'在数据流中占用了n字节。 向量的长度不包含在编码的数据流中。  
 
    In the following example, Datum is defined to be three consecutive
    bytes that the protocol does not interpret, while Data is three
-   consecutive Datum, consuming a total of nine bytes.
+   consecutive Datum, consuming a total of nine bytes.  
+   在下面的案例中，Datum定义了三个连续的协议不解释的字节，当数据包含三个连续的Datum，总共消耗九个字节：  
 
       opaque Datum[3];      /* three uninterpreted bytes */
       Datum Data[9];        /* 3 consecutive 3 byte vectors */
@@ -434,34 +312,28 @@ RFC 5246                          TLS                        August 2008
    in the byte stream.  The length will be in the form of a number
    consuming as many bytes as required to hold the vector's specified
    maximum (ceiling) length.  A variable-length vector with an actual
-   length field of zero is referred to as an empty vector.
+   length field of zero is referred to as an empty vector.  
+   通过分配一个合法长度的子范围可以定义可变长度变量，包括，使用<floor..ceiling>方法。  编码时，在字节流中实际长度在向量内容前面。  长度将会在指定的最大长度内尽可能的大。  实际长度字段为0的可变长度的变量表示空向量：  
 
       T T'<floor..ceiling>;
 
    In the following example, mandatory is a vector that must contain
-   between 300 and 400 bytes of type opaque.  It can never be empty.
+   between 300 and 400 bytes of type opaque[不透明的].  It can never be empty.
    The actual length field consumes two bytes, a uint16, which is
    sufficient to represent the value 400 (see Section 4.4).  On the
    other hand, longer can represent up to 800 bytes of data, or 400
    uint16 elements, and it may be empty.  Its encoding will include a
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 8]
-
-RFC 5246                          TLS                        August 2008
-
-
    two-byte actual length field prepended to the vector.  The length of
    an encoded vector must be an even multiple of the length of a single
-   element (for example, a 17-byte vector of uint16 would be illegal).
+   element (for example, a 17-byte vector of uint16 would be illegal).  
+   以下案例中，向量被强制要求必须包含300-400的字节，永远都不为空。  实际长度字段消耗量字节，一个unit16，表示400.  另一方面，最大可以表示800字节的数据，或者 400 uint16元素，他可能为空。  
 
       opaque mandatory<300..400>;
             /* length field is 2 bytes, cannot be empty */
       uint16 longer<0..800>;
             /* zero to 400 16-bit unsigned integers */
 
-4.4.  Numbers
+4.4.  Numbers 数字 
 
    The basic numeric data type is an unsigned byte (uint8).  All larger
    numeric data types are formed from fixed-length series of bytes
@@ -499,14 +371,6 @@ RFC 5246                          TLS                        August 2008
    one byte to be used to carry fields of type Color.
 
       enum { red(3), blue(5), white(7) } Color;
-
-
-
-
-Dierks & Rescorla           Standards Track                     [Page 9]
-
-RFC 5246                          TLS                        August 2008
-
 
    One may optionally specify a value without its associated tag to
    force the width definition without defining a superfluous element.
@@ -556,14 +420,6 @@ RFC 5246                          TLS                        August 2008
    must be a case arm for every element of the enumeration declared in
    the select.  Case arms have limited fall-through: if two case arms
    follow in immediate succession with no fields in between, then they
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 10]
-
-RFC 5246                          TLS                        August 2008
-
-
    both contain the same fields.  Thus, in the example below, "orange"
    and "banana" both contain V2.  Note that this is a new piece of
    syntax in TLS 1.2.
@@ -609,16 +465,6 @@ RFC 5246                          TLS                        August 2008
                 V2;   /* VariantBody, tag = orange or banana */
           } variant_body;       /* optional label on variant */
       } VariantRecord;
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 11]
-
-RFC 5246                          TLS                        August 2008
-
 
 4.7.  Cryptographic Attributes
 
@@ -667,15 +513,6 @@ RFC 5246                          TLS                        August 2008
           s INTEGER
       }
 
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 12]
-
-RFC 5246                          TLS                        August 2008
-
-
    Note: In current terminology, DSA refers to the Digital Signature
    Algorithm and DSS refers to the NIST standard.  In the original SSL
    and TLS specs, "DSS" was used universally.  This document uses "DSA"
@@ -722,16 +559,6 @@ RFC 5246                          TLS                        August 2008
    bytes, would be equal to two bytes for field1 and field2, plus two
    bytes for the signature and hash algorithm, plus two bytes for the
    length of the signature, plus the length of the output of the signing
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 13]
-
-RFC 5246                          TLS                        August 2008
-
-
    algorithm.  The length of the signature is known because the
    algorithm and key used for the signing are known prior to encoding or
    decoding this structure.
@@ -754,10 +581,10 @@ RFC 5246                          TLS                        August 2008
 
       Example1 ex1 = {1, 4};  /* assigns f1 = 1, f2 = 4 */
 
-5.  HMAC and the Pseudorandom Function
+5.  HMAC and the Pseudorandom Function【伪随机函数】
 
-   The TLS record layer uses a keyed Message Authentication Code (MAC)
-   to protect message integrity.  The cipher suites defined in this
+   The TLS record layer uses a keyed Message Authentication Code (MAC，信息识别码)
+   to protect message integrity【完整】.  The cipher suites defined in this
    document use a construction known as HMAC, described in [HMAC], which
    is based on a hash function.  Other cipher suites MAY define their
    own MAC constructions, if needed.
@@ -777,16 +604,6 @@ RFC 5246                          TLS                        August 2008
    First, we define a data expansion function, P_hash(secret, data),
    that uses a single hash function to expand a secret and seed into an
    arbitrary quantity of output:
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 14]
-
-RFC 5246                          TLS                        August 2008
-
 
       P_hash(secret, seed) = HMAC_hash(secret, A(1) + seed) +
                              HMAC_hash(secret, A(2) + seed) +
@@ -835,15 +652,6 @@ RFC 5246                          TLS                        August 2008
    values are assigned by IANA in the TLS Content Type Registry as
    described in Section 12.
 
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 15]
-
-RFC 5246                          TLS                        August 2008
-
-
    Implementations MUST NOT send record types not defined in this
    document unless negotiated by some extension.  If a TLS
    implementation receives an unexpected record type, it MUST send an
@@ -865,7 +673,7 @@ RFC 5246                          TLS                        August 2008
    A TLS connection state is the operating environment of the TLS Record
    Protocol.  It specifies a compression algorithm, an encryption
    algorithm, and a MAC algorithm.  In addition, the parameters for
-   these algorithms are known: the MAC key and the bulk encryption keys
+   these algorithms are known: the MAC key and the bulk[大批的，大量的] encryption keys
    for the connection in both the read and the write directions.
    Logically, there are always four connection states outstanding: the
    current read and write states, and the pending read and write states.
@@ -889,16 +697,6 @@ RFC 5246                          TLS                        August 2008
    PRF algorithm
       An algorithm used to generate keys from the master secret (see
       Sections 5 and 6.3).
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 16]
-
-RFC 5246                          TLS                        August 2008
-
 
    bulk encryption algorithm
       An algorithm to be used for bulk encryption.  This specification
@@ -944,17 +742,6 @@ RFC 5246                          TLS                        August 2008
 
       /* The algorithms specified in CompressionMethod, PRFAlgorithm,
          BulkCipherAlgorithm, and MACAlgorithm may be added to. */
-
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 17]
-
-RFC 5246                          TLS                        August 2008
-
 
       struct {
           ConnectionEnd          entity;
@@ -1004,14 +791,6 @@ RFC 5246                          TLS                        August 2008
       this will also contain whatever state information is necessary to
       allow the stream to continue to encrypt or decrypt data.
 
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 18]
-
-RFC 5246                          TLS                        August 2008
-
-
    MAC key
       The MAC key for this connection, as generated above.
 
@@ -1060,14 +839,6 @@ RFC 5246                          TLS                        August 2008
    type
       The higher-level protocol used to process the enclosed fragment.
 
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 19]
-
-RFC 5246                          TLS                        August 2008
-
-
    version
       The version of the protocol being employed.  This document
       describes TLS Version 1.2, which uses the version { 3, 3 }.  The
@@ -1115,14 +886,6 @@ RFC 5246                          TLS                        August 2008
    by more than 1024 bytes.  If the decompression function encounters a
    TLSCompressed.fragment that would decompress to a length in excess of
    2^14 bytes, it MUST report a fatal decompression failure error.
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 20]
-
-RFC 5246                          TLS                        August 2008
-
 
       struct {
           ContentType type;       /* same as TLSPlaintext.type */
@@ -1177,7 +940,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 21]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    fragment
@@ -1233,7 +996,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 22]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       struct {
@@ -1289,7 +1052,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 23]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    IV.  Thus, the padding length modulo 8 must be equal to 6 in order to
@@ -1345,7 +1108,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 24]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    appropriate to use the partially implicit nonce technique described
@@ -1401,7 +1164,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 25]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    The master secret is expanded into a sequence of secure bytes, which
@@ -1457,7 +1220,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 26]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    session identifier
@@ -1513,7 +1276,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 27]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    (See Section 6.1.)  The ChangeCipherSpec message is sent during the
@@ -1569,7 +1332,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 28]
 
-RFC 5246                          TLS                        August 2008
+
 
 
           export_restriction_RESERVED(60),
@@ -1625,7 +1388,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 29]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    of this standard should be taken to dictate the manner in which a
@@ -1681,7 +1444,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 30]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    bad_record_mac
@@ -1737,7 +1500,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 31]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    certificate_expired
@@ -1793,7 +1556,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 32]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    insufficient_security
@@ -1843,15 +1606,6 @@ RFC 5246                          TLS                        August 2008
    optionally authenticate each other, and use public-key encryption
    techniques to generate shared secrets.
 
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 33]
-
-RFC 5246                          TLS                        August 2008
-
-
    The TLS Handshake Protocol involves the following steps:
 
    -  Exchange hello messages to agree on algorithms, exchange random
@@ -1899,15 +1653,6 @@ RFC 5246                          TLS                        August 2008
    random values are generated and exchanged: ClientHello.random and
    ServerHello.random.
 
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 34]
-
-RFC 5246                          TLS                        August 2008
-
-
    The actual key exchange uses up to four messages: the server
    Certificate, the ServerKeyExchange, the client Certificate, and the
    ClientKeyExchange.  New key exchange methods can be created by
@@ -1944,25 +1689,6 @@ RFC 5246                          TLS                        August 2008
    flow chart below.)  Application data MUST NOT be sent prior to the
    completion of the first handshake (before a cipher suite other than
    TLS_NULL_WITH_NULL_NULL is established).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                    [Page 35]
-
-RFC 5246                          TLS                        August 2008
-
 
       Client                                               Server
 
@@ -2017,7 +1743,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 36]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       Client                                                Server
@@ -2073,7 +1799,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 37]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    The handshake protocol messages are presented below in the order they
@@ -2129,7 +1855,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 38]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       After sending a HelloRequest, servers SHOULD NOT repeat the
@@ -2185,7 +1911,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 39]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    this connection, or from another currently active connection.  The
@@ -2241,7 +1967,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 40]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       struct {
@@ -2297,7 +2023,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 41]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       compression_method from that session.  This vector MUST contain,
@@ -2353,7 +2079,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 42]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    The presence of extensions can be detected by determining whether
@@ -2409,7 +2135,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 43]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 7.4.1.4.  Hello Extensions
@@ -2465,7 +2191,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 44]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    In general, the specification of each extension type needs to
@@ -2521,7 +2247,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 45]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       enum {
@@ -2577,7 +2303,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 46]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    signature_algorithms extension, listing the algorithms it is willing
@@ -2633,7 +2359,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 47]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Structure of this message:
@@ -2689,7 +2415,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 48]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       DHE_RSA            RSA public key; the certificate MUST allow the
@@ -2745,7 +2471,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 49]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    If the server has multiple certificates, it chooses one of them based
@@ -2801,7 +2527,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 50]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Meaning of this message:
@@ -2857,7 +2583,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 51]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       struct {
@@ -2913,7 +2639,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 52]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    digest algorithms should be used with each key size.  In addition,
@@ -2969,7 +2695,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 53]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    supported_signature_algorithms
@@ -3025,7 +2751,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 54]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Note: It is a fatal handshake_failure alert for an anonymous server
@@ -3081,7 +2807,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 55]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Meaning of this message:
@@ -3137,7 +2863,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 56]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    -  The certificates MUST be signed using an acceptable hash/
@@ -3193,7 +2919,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 57]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       struct {
@@ -3249,7 +2975,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 58]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Note: The version number in the PreMasterSecret is the version
@@ -3305,7 +3031,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 59]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       1. Generate a string R of 48 random bytes
@@ -3361,7 +3087,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 60]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    upgrading from SSLv3 MUST modify their implementations to generate
@@ -3417,7 +3143,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 61]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 7.4.8.  Certificate Verify
@@ -3473,7 +3199,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 62]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 7.4.9.  Finished
@@ -3529,7 +3255,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 63]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       handshake_messages
@@ -3585,7 +3311,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 64]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 8.1.1.  RSA
@@ -3641,7 +3367,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 65]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    -  TLS ClientCertificateType Identifiers Registry: Future values in
@@ -3697,7 +3423,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 66]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    -  TLS HashAlgorithm Registry: The registry has been initially
@@ -3753,7 +3479,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 67]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 Appendix A.  Protocol Data Structures and Constant Values
@@ -3809,7 +3535,7 @@ A.1.  Record Layer
 
 Dierks & Rescorla           Standards Track                    [Page 68]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    struct {
@@ -3865,7 +3591,7 @@ A.3.  Alert Messages
 
 Dierks & Rescorla           Standards Track                    [Page 69]
 
-RFC 5246                          TLS                        August 2008
+
 
 
        insufficient_security(71),
@@ -3921,7 +3647,7 @@ A.4.  Handshake Protocol
 
 Dierks & Rescorla           Standards Track                    [Page 70]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 A.4.1.  Hello Messages
@@ -3977,7 +3703,7 @@ A.4.1.  Hello Messages
 
 Dierks & Rescorla           Standards Track                    [Page 71]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    enum {
@@ -4033,7 +3759,7 @@ A.4.2.  Server Authentication and Key Exchange Messages
 
 Dierks & Rescorla           Standards Track                    [Page 72]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    struct {
@@ -4089,7 +3815,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 73]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 A.4.3.  Client Authentication and Key Exchange Messages
@@ -4145,7 +3871,7 @@ A.4.4.  Handshake Finalization Message
 
 Dierks & Rescorla           Standards Track                    [Page 74]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 A.5.  The Cipher Suite
@@ -4201,7 +3927,7 @@ A.5.  The Cipher Suite
 
 Dierks & Rescorla           Standards Track                    [Page 75]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       CipherSuite TLS_DH_DSS_WITH_3DES_EDE_CBC_SHA      = { 0x00,0x0D };
@@ -4257,7 +3983,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 76]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    New cipher suite values have been assigned by IANA as described in
@@ -4313,7 +4039,7 @@ A.6.  The Security Parameters
 
 Dierks & Rescorla           Standards Track                    [Page 77]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 A.7.  Changes to RFC 4492
@@ -4369,7 +4095,7 @@ Appendix B.  Glossary
 
 Dierks & Rescorla           Standards Track                    [Page 78]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    block cipher
@@ -4425,7 +4151,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 79]
 
-RFC 5246                          TLS                        August 2008
+
 
 
       of protection.  (The low bit of each key byte is presumed to be
@@ -4481,7 +4207,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 80]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    public key cryptography
@@ -4537,7 +4263,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 81]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    SHA-256
@@ -4593,7 +4319,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 82]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 Appendix C.  Cipher Suite Definitions
@@ -4649,7 +4375,7 @@ TLS_DH_anon_WITH_AES_256_CBC_SHA256     DH_anon      AES_256_CBC  SHA256
 
 Dierks & Rescorla           Standards Track                    [Page 83]
 
-RFC 5246                          TLS                        August 2008
+
 
 
                         Key      IV   Block
@@ -4705,7 +4431,7 @@ SHA256    HMAC-SHA256     32            32
 
 Dierks & Rescorla           Standards Track                    [Page 84]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 Appendix D.  Implementation Notes
@@ -4761,7 +4487,7 @@ D.4.  Implementation Pitfalls
 
 Dierks & Rescorla           Standards Track                    [Page 85]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    been clarified in this document, but this appendix contains a short
@@ -4817,7 +4543,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 86]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    -  How do you generate unpredictable IVs for CBC mode ciphers (see
@@ -4873,7 +4599,7 @@ E.1.  Compatibility with TLS 1.0/1.1 and SSL 3.0
 
 Dierks & Rescorla           Standards Track                    [Page 87]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    for the highest version supported by the server that is not greater
@@ -4929,7 +4655,7 @@ E.2.  Compatibility with SSL 2.0
 
 Dierks & Rescorla           Standards Track                    [Page 88]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    However, even TLS servers that do not support SSL 2.0 MAY accept
@@ -4985,7 +4711,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 89]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    challenge_length
@@ -5041,7 +4767,7 @@ E.3.  Avoiding Man-in-the-Middle Version Rollback
 
 Dierks & Rescorla           Standards Track                    [Page 90]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 Appendix F.  Security Analysis
@@ -5097,7 +4823,7 @@ F.1.1.1.  Anonymous Key Exchange
 
 Dierks & Rescorla           Standards Track                    [Page 91]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    client key exchange message.  Eavesdroppers who do not know the
@@ -5153,7 +4879,7 @@ F.1.1.3.  Diffie-Hellman Key Exchange with Authentication
 
 Dierks & Rescorla           Standards Track                    [Page 92]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    pre_master_secret) every time they communicate.  To prevent the
@@ -5209,7 +4935,7 @@ F.1.2.  Version Rollback Attacks
 
 Dierks & Rescorla           Standards Track                    [Page 93]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    padding does not impact security for the size of the signed hashes
@@ -5265,7 +4991,7 @@ F.2.  Protecting Application Data
 
 Dierks & Rescorla           Standards Track                    [Page 94]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    message contents, and two fixed character strings.  The message type
@@ -5321,7 +5047,7 @@ F.4.  Security of Composite Cipher Modes
 
 Dierks & Rescorla           Standards Track                    [Page 95]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    In particular, it has been shown that there exist perfectly secure
@@ -5377,7 +5103,7 @@ F.6.  Final Notes
 
 Dierks & Rescorla           Standards Track                    [Page 96]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    The system is only as strong as the weakest key exchange and
@@ -5433,7 +5159,7 @@ Normative References
 
 Dierks & Rescorla           Standards Track                    [Page 97]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    [REQ]      Bradner, S., "Key words for use in RFCs to Indicate
@@ -5489,7 +5215,7 @@ Informative References
 
 Dierks & Rescorla           Standards Track                    [Page 98]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    [DSS-3]    NIST FIPS PUB 186-3 Draft, "Digital Signature Standard",
@@ -5545,7 +5271,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                    [Page 99]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    [RANDOM]   Eastlake, D., 3rd, Schiller, J., and S. Crocker,
@@ -5601,7 +5327,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                   [Page 100]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    [TLSPGP]   Mavrogiannopoulos, N., "Using OpenPGP Keys for Transport
@@ -5657,7 +5383,7 @@ Contributors
 
 Dierks & Rescorla           Standards Track                   [Page 101]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Ran Canetti
@@ -5713,7 +5439,7 @@ RFC 5246                          TLS                        August 2008
 
 Dierks & Rescorla           Standards Track                   [Page 102]
 
-RFC 5246                          TLS                        August 2008
+
 
 
    Jim Roskind
@@ -5769,7 +5495,7 @@ Editors' Addresses
 
 Dierks & Rescorla           Standards Track                   [Page 103]
 
-RFC 5246                          TLS                        August 2008
+
 
 
 Full Copyright Statement
@@ -5811,17 +5537,3 @@ Intellectual Property
    rights that may cover technology that may be required to implement
    this standard.  Please address the information to the IETF at
    ietf-ipr@ietf.org.
-
-
-
-
-
-
-
-
-
-
-
-
-Dierks & Rescorla           Standards Track                   [Page 104]
-
